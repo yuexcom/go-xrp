@@ -1,2 +1,4 @@
 go-xrp
 vendor
+coverage.txt
+main
