@@ -13,7 +13,7 @@ The missing XRP Ledger API for Golang.
 ## Installation
 
 ```bash
-$ go get github.com/yuexcom/go-xep
+$ go get github.com/yuexcom/go-xrp
 ```
 
 ## Contributing
@@ -22,9 +22,9 @@ Please make sure to update tests as appropriate.
 
 ## TODO
 
-[x] Realtime fetching ledgers and validated transactions
-[ ] Submit transaction
-[ ] ..
+- [x] Realtime fetching ledgers and validated transactions
+- [ ] Submit transaction
+- [ ] ..
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
