@@ -2,11 +2,11 @@
 
 # go-xrp
 
-[![Travis](https://img.shields.io/travis/yuexcom/go-xrp.svg?style=flat-square)](https://travis-ci.org/yuexcom/go-xrp)
-[![Go Report Card](https://goreportcard.com/badge/github.com/yuexcom/go-xrp?style=flat-square)](https://goreportcard.com/report/github.com/yuexcom/go-xrp)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/yuexcom/go-xrp)
+[![Travis](https://img.shields.io/travis/yuexcom/go-xrp.svg)](https://travis-ci.org/yuexcom/go-xrp)
+[![Go Report Card](https://goreportcard.com/badge/github.com/yuexcom/go-xrp)](https://goreportcard.com/report/github.com/yuexcom/go-xrp)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/yuexcom/go-xrp)
 [![codecov](https://codecov.io/gh/yuexcom/go-xrp/branch/master/graph/badge.svg)](https://codecov.io/gh/yuexcom/go-xrp)
-[![GitHub version](https://badge.fury.io/gh/yuexcom%2Fgo-xrp.svg)](https://badge.fury.io/gh/yuexcom%2Fgo-xrp)
+[![GitHub version](https://badge.fury.io/gh/yuexcom%2Fgo-xrp.svg)](https://github.com/yuexcom/go-xrp/releases)
 
 The missing XRP Ledger API for Golang.
 
@@ -18,8 +18,13 @@ $ go get github.com/yuexcom/go-xep
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 Please make sure to update tests as appropriate.
+
+## TODO
+
+[x] Realtime fetching ledgers and validated transactions
+[ ] Submit transaction
+[ ] ..
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
