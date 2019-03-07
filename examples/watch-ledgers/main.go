@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
+	xrp "go-xrp"
 	"log"
-
-	"github.com/yuexcom/go-xrp"
 )
 
 func main() {
