@@ -1,5 +1,5 @@
 language: go
-sudo: required
+sudo: false
 go:
   - "1.10.x"
   - "1.11.x"
@@ -19,7 +19,7 @@ git:
 go_import_path: github.com/yuexcom/go-xrp
 
 script: 
-  - ./run-test.sh
+  - sh run-test.sh
  
 after_success:
   - bash <(curl -s https://codecov.io/bash)
