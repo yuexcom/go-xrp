@@ -1,8 +1,11 @@
-sudo: required
 language: go
+sudo: required
 go:
   - "1.10.x"
   - "1.11.x"
+
+before_install:
+  - go get -t -v ./...
 
 matrix:
   fast_finish: true
@@ -16,7 +19,7 @@ git:
 go_import_path: github.com/yuexcom/go-xrp
 
 script: 
-  - go test
+  - ./run-test.sh
  
 after_success:
   - bash <(curl -s https://codecov.io/bash)
