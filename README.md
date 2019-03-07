@@ -6,7 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/yuexcom/go-xrp?style=flat-square)](https://goreportcard.com/report/github.com/yuexcom/go-xrp)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/yuexcom/go-xrp)
 [![codecov](https://codecov.io/gh/yuexcom/go-xrp/branch/master/graph/badge.svg)](https://codecov.io/gh/yuexcom/go-xrp)
-[![GitHub version](https://badge.fury.io/gh/yuexcom%2Fgo-xrp.svg)](https://github.com/yuexcom/go-xrp/releases)
+[![GitHub version](https://badge.fury.io/gh/yuexcom%2Fgo-xrp.svg)](https://badge.fury.io/gh/yuexcom%2Fgo-xrp)
 
 The missing XRP Ledger API for Golang.
 
