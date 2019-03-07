@@ -1,4 +1,4 @@
-module go-xrp
+module xrp
 
 go 1.12
 
