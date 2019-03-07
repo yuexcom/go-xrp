@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/yuexcom/go-xrp"
+	"go-xrp"
 )
 
 func main() {
