@@ -4,6 +4,10 @@ import (
 	"testing"
 )
 
+func TestMain(m *testing.M) {
+	m.Run()
+}
+
 func TestDial(t *testing.T) {
 
 	_, err := Dial("s.altnet.rippletest.net:51233")
