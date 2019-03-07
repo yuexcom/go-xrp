@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	xrp "go-xrp"
+	"github.com/yuexcom/go-xrp"
 	"log"
 )
 
