@@ -23,8 +23,9 @@ Please make sure to update tests as appropriate.
 ## TODO
 
 - [x] Realtime fetching ledgers and validated transactions
-- [ ] Submit transaction
-- [ ] ..
+- [x] Submit transaction
+- [ ] Scan block with filters
+- [ ] 
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
