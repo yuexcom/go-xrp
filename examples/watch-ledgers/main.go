@@ -8,13 +8,17 @@ import (
 
 func main() {
 
-	client, err := xrp.Dial("s2.ripple.com:443")
+	client, err := xrp.Dial(xrp.TestNetURL, true)
 
 	if err != nil {
 		log.Fatal("dial: ", err)
 	}
 
-	ledgers, err := client.GetLedgers()
+	cls := &xrp.CommandLedgerStream{
+		Streams: []string{"ledger", "transactions"},
+	}
+
+	ledgers, err := client.GetLedgers(cls)
 
 	if err != nil {
 		log.Fatal("get ledgers: ", err)

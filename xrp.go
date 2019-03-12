@@ -1,7 +1,7 @@
 package xrp
 
 import (
-	"encoding/json"
+	"fmt"
 	"log"
 	"net/url"
 
@@ -9,176 +9,23 @@ import (
 )
 
 var (
-	networkURL = map[string]string{
-		"MAIN": "s2.ripple.com:443",
-		"TEST": "s.altnet.rippletest.net:51233",
-	}
+	//TestNetURL todo..
+	TestNetURL = "s.altnet.rippletest.net:51233"
+	//MainNetURL todo..
+	MainNetURL = "s2.ripple.com:443"
 )
 
 const (
-	STATUS_SUCCESS     = "success"
-	TYPE_LEDGER_CLOSED = "ledgerClosed"
-	TYPE_RESPONSE      = "response"
-	TYPE_TRANSACTION   = "transaction"
+	statusSuccess    = "success"
+	typeLedgerClosed = "ledgerClosed"
+	typeResponse     = "response"
+	typeTransaction  = "transaction"
 
-	TES_SUCCESS  = "tesSUCCESS"
-	TEC_PATH_DRY = "tecPATH_DRY"
+	tesSuccess = "tesSUCCESS"
+	tecDryPath = "tecPATH_DRY"
 )
 
-// NETWORK
-
-type Info struct {
-	BuildVersion string `json:"build_version"`
-	HostID       string
-	Peers        int
-}
-
-type Result struct {
-	*Ledger
-	*Info
-}
-
-type Response struct {
-	ID     int    `json:"id,omitempty"`
-	Status string `json:"status,omitempty"`
-	Type   string `json:"type,omitempty"`
-
-	Result *Result `json:"result,omitempty"`
-
-	EngineResult        string `json:"engine_result"`
-	EngineResultCode    int    `json:"engine_result_code"`
-	LedgerCurrentIndex  uint64 `json:"ledger_current_index"`
-	EngineResultMessage string `json:"engine_result_message"`
-	LedgerHash          string `json:"ledger_hash"`
-	LedgerIndex         uint64 `json:"ledger_index"`
-
-	Transaction Transaction `json:"transaction"`
-
-	Validated bool `json:"validated"`
-
-	Ledger
-}
-
-//Command
-type Command struct {
-	Command string   `json:"command,omitempty"`
-	ID      int      `json:"id,omitempty"`
-	Streams []string `json:"streams,omitempty"`
-
-	LedgerIndex  string `json:"ledger_index,omitempty"`
-	Full         bool   `json:"full,omitempty"`
-	Accounts     bool   `json:"accounts,omitempty"`
-	Transactions bool   `json:"transactions,omitempty"`
-	Expand       bool   `json:"expand,omitempty"`
-	OwnerFunds   bool   `json:"owner_funds,omitempty"`
-}
-
-func (cmd *Command) toJSON() (value []byte) {
-	value, _ = json.Marshal(cmd)
-	return
-}
-
-// OBJS
-
-type TransactionMeta struct {
-	AffectedNodes []struct {
-		CreatedNode struct {
-			LedgerEntryType string `json:"LedgerEntryType"`
-			LedgerIndex     string `json:"LedgerIndex"`
-			NewFields       struct {
-				Account       string `json:"Account"`
-				BookDirectory string `json:"BookDirectory"`
-				Expiration    int64  `json:"Expiration"`
-				Flags         int32  `json:"Flags"`
-				Sequence      int64  `json:"Sequence"`
-				TakerGets     struct {
-					Currency string `json:"currency"`
-					Issuer   string `json:"issuer"`
-					Value    string `json:"value"`
-				} `json:"TakerGets"`
-				TakerPays struct {
-					Currency string `json:"currency"`
-					Issuer   string `json:"issuer"`
-					Value    string `json:"value"`
-				} `json:"TakerPays"`
-			} `json:"NewFields"`
-		} `json:"CreatedNode,omitempty"`
-		ModifiedNode struct {
-			FinalFields struct {
-				Flags         int    `json:"Flags"`
-				IndexNext     string `json:"IndexNext"`
-				IndexPrevious string `json:"IndexPrevious"`
-				Owner         string `json:"Owner"`
-				RootIndex     string `json:"RootIndex"`
-			} `json:"FinalFields"`
-			LedgerEntryType string `json:"LedgerEntryType"`
-			LedgerIndex     string `json:"LedgerIndex"`
-		} `json:"ModifiedNode,omitempty"`
-		DeletedNode struct {
-			FinalFields struct {
-				Account           string `json:"Account"`
-				BookDirectory     string `json:"BookDirectory"`
-				BookNode          string `json:"BookNode"`
-				Expiration        int64  `json:"Expiration"`
-				Flags             int32  `json:"Flags"`
-				OwnerNode         string `json:"OwnerNode"`
-				PreviousTxnID     string `json:"PreviousTxnID"`
-				PreviousTxnLgrSeq int64  `json:"PreviousTxnLgrSeq"`
-				Sequence          int32  `json:"Sequence"`
-				TakerGets         struct {
-					Currency string `json:"currency"`
-					Issuer   string `json:"issuer"`
-					Value    string `json:"value"`
-				} `json:"TakerGets"`
-				TakerPays struct {
-					Currency string `json:"currency"`
-					Issuer   string `json:"issuer"`
-					Value    string `json:"value"`
-				} `json:"TakerPays"`
-			} `json:"FinalFields"`
-			LedgerEntryType string `json:"LedgerEntryType"`
-			LedgerIndex     string `json:"LedgerIndex"`
-		} `json:"DeletedNode,omitempty"`
-	} `json:"AffectedNodes"`
-	TransactionIndex  int64  `json:"TransactionIndex"`
-	TransactionResult string `json:"TransactionResult"`
-}
-
-//Transaction
-type Transaction struct {
-	Account            string `json:"Account"`
-	Expiration         int64  `json:"Expiration"`
-	Fee                string `json:"Fee"`
-	Flags              int64  `json:"Flags"`
-	LastLedgerSequence int64  `json:"LastLedgerSequence"`
-	OfferSequence      int64  `json:"OfferSequence"`
-	Sequence           int64  `json:"Sequence"`
-	SigningPubKey      string `json:"SigningPubKey"`
-	DestinationTag     uint32 `json:"DestinationTag"`
-	TransactionType    string `json:"TransactionType"`
-	TxnSignature       string `json:"TxnSignature"`
-	Date               int64  `json:"date"`
-	Hash               string `json:"hash"`
-	OwnerFunds         string `json:"owner_funds"`
-}
-
-//Ledger
-type Ledger struct {
-	FeeBase          int    `json:"fee_base,omitempty"`
-	FeeRef           int    `json:"fee_ref,omitempty"`
-	LedgerHash       string `json:"ledger_hash,omitempty"`
-	LedgerIndex      uint64 `json:"ledger_index,omitempty"`
-	LedgerTime       int    `json:"ledger_time,omitempty"`
-	ReserveBase      int    `json:"reserve_base,omitempty"`
-	ReserveInc       int    `json:"reserve_inc,omitempty"`
-	TxnCount         int    `json:"txn_count,omitempty"`
-	Type             string `json:"type,omitempty"`
-	ValidatedLedgers string `json:"validated_ledgers,omitempty"`
-	Transactions     []Transaction
-}
-
-//OPTS
-
+//Options todo..
 type Options struct {
 	URL string
 }
@@ -194,20 +41,50 @@ type Client struct {
 }
 
 //GetLedgers get validated ledgers from network
-func (c *Client) GetLedgers() (ledger <-chan *Ledger, err error) {
+func (c *Client) GetLedgers(cls *CommandLedgerStream) (ledger <-chan *Ledger, err error) {
 
 	cmd := Command{
-		ID:      2,
-		Command: "subscribe",
-		Streams: []string{"ledger", "transactions"},
+		ID:                  2,
+		Command:             "subscribe",
+		CommandLedgerStream: cls,
 	}
+
+	fmt.Println(string(cmd.toJSON()))
 
 	err = c.SendCommand(cmd.toJSON())
 
 	return c.Ledger, err
 }
 
-func (c *Client) GetTransactions(hash string) (transactions *[]Transaction, err error) {
+//CreateTransaction todo..
+func (c *Client) SubmitTransaction(tx *TxOptions) (rsp *TxResult, err error) {
+
+	cmd := Command{
+		ID:      2,
+		Command: "submit",
+		CommandTX: &CommandTX{
+			TxJSON:     tx,
+			Secret:     tx.Secret,
+			Offline:    tx.Offline,
+			FeeMultMax: tx.FeeMultMax,
+		},
+	}
+
+	err = c.SendCommand(cmd.toJSON())
+
+	if err != nil {
+		return
+	}
+
+	sr := Response{}
+
+	err = c.conn.ReadJSON(&sr)
+
+	if err != nil {
+		return
+	}
+
+	rsp = sr.Result.TxResult
 
 	return
 }
@@ -230,7 +107,11 @@ func (c *Client) Ping() (status bool, err error) {
 
 	err = c.conn.ReadJSON(&rsp)
 
-	if rsp.Status == STATUS_SUCCESS {
+	if err != nil {
+		return
+	}
+
+	if rsp.Status == statusSuccess {
 		status = true
 	}
 
@@ -249,15 +130,21 @@ func (c *Client) SendCommand(cmd []byte) (err error) {
 }
 
 //Dial Dial WSS protocol
-func Dial(host string) (c Client, err error) {
+func Dial(host string, tls bool) (c Client, err error) {
 
 	c = Client{
 		Ledger:   make(chan *Ledger),
 		Response: make(chan *Response),
 	}
 
+	scheme := "ws"
+
+	if tls {
+		scheme = "wss"
+	}
+
 	u := url.URL{
-		Scheme: "wss",
+		Scheme: scheme,
 		Host:   host,
 		Path:   "/",
 	}
@@ -265,7 +152,7 @@ func Dial(host string) (c Client, err error) {
 	conn, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 
 	if err != nil {
-		log.Fatal("go-xrp dial:", err)
+		log.Fatal("go-xrp dial: ", err)
 		return
 	}
 
@@ -311,7 +198,7 @@ func (c *Client) handleMessage() {
 		}
 
 		switch {
-		case rsp.Type == TYPE_LEDGER_CLOSED:
+		case rsp.Type == typeLedgerClosed:
 			c.tmpLedger = &Ledger{
 				FeeBase:          rsp.FeeBase,
 				FeeRef:           rsp.FeeRef,
@@ -324,10 +211,15 @@ func (c *Client) handleMessage() {
 				Type:             rsp.Type,
 				ValidatedLedgers: rsp.ValidatedLedgers,
 			}
+
+			if rsp.TxnCount <= 0 {
+				c.Ledger <- c.tmpLedger
+			}
+
 			c.tmpLeftTxnCount = rsp.TxnCount
-		case rsp.Type == TYPE_RESPONSE && rsp.ID == 2 && rsp.Status == STATUS_SUCCESS:
+		case rsp.Type == typeResponse && rsp.ID == 2 && rsp.Status == statusSuccess:
 			c.tmpLedger = rsp.Result.Ledger
-		case rsp.Type == TYPE_TRANSACTION && rsp.Validated == true:
+		case rsp.Type == typeTransaction && rsp.Validated == true:
 			if c.tmpLedger.LedgerIndex == rsp.LedgerIndex {
 				c.tmpLedger.Transactions = append(c.tmpLedger.Transactions, rsp.Transaction)
 				c.tmpLeftTxnCount--
