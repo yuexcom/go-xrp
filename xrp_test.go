@@ -10,7 +10,7 @@ func TestMain(m *testing.M) {
 
 func TestDial(t *testing.T) {
 
-	_, err := Dial("s.altnet.rippletest.net:51233")
+	_, err := Dial("s.altnet.rippletest.net:51233",true)
 
 	if err != nil {
 		t.Error("dial err:", err)
