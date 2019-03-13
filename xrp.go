@@ -40,6 +40,24 @@ type Client struct {
 	tmpLeftTxnCount int
 }
 
+func (c *Client) GetClosedLedger() (ledger *Ledger, err error) {
+
+	cmd := Command{
+		ID:      2,
+		Command: "ledger_closed",
+	}
+
+	err = c.SendCommand(cmd.toJSON())
+
+	rsp := Response{}
+
+	err = c.conn.ReadJSON(&rsp)
+
+	ledger = rsp.Result.Ledger
+
+	return
+}
+
 //GetLedgers get validated ledgers from network
 func (c *Client) GetLedgers(cls *CommandLedgerStream) (ledger <-chan *Ledger, err error) {
 

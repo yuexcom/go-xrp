@@ -25,6 +25,8 @@ Please make sure to update tests as appropriate.
 - [x] Realtime fetching ledgers and validated transactions
 - [x] Submit transaction
 - [ ] Scan block with filters
+- [ ] Socket error handling
+- [ ] Generic command 
 - [ ] 
 
 ## License
