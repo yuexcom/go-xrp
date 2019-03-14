@@ -33,12 +33,30 @@ type CommandLedgerStream struct {
 	OwnerFunds   bool     `json:"owner_funds,omitempty"`
 }
 
+type CommandGetTX struct {
+	Hash   string `json:"transaction,omitempty"`
+	Binary bool   `json:"binary,omitempty"`
+}
+
+type CommandLedger struct {
+	LedgerHash  string `json:"ledger_hash,omitempty"`
+	LedgerIndex string `json:"ledger_index,omitempty"`
+	Full        bool   `json:"full,omitempty"`
+	Accounts    bool   `json:"accounts,omitempty"`
+	Expand      bool   `json:"expand,omitempty"`
+	OwnerFunds  bool   `json:"owner_funds,omitempty"`
+	Queue       bool   `json:"queue,omitempty"`
+	Binary      bool   `json:"binary,omitempty"`
+}
+
 //Command ..
 type Command struct {
 	Command string `json:"command,omitempty"`
 	ID      int    `json:"id,omitempty"`
 
 	*CommandTX
+	*CommandGetTX
+	*CommandLedger
 	*CommandLedgerStream
 }
 

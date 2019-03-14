@@ -41,6 +41,39 @@ type Client struct {
 	tmpLeftTxnCount int
 }
 
+//GetTransaction returns tx by hash
+func (c *Client) GetTransaction(hash string) (ledger *Ledger, err error) {
+
+	return
+}
+
+//GetLedger returns ledger by hash
+func (c *Client) GetLedger(cmdLedger *CommandLedger) (ledger *Ledger, err error) {
+
+	cmd := Command{
+		ID:            1,
+		Command:       "ledger",
+		CommandLedger: cmdLedger,
+	}
+
+	err = c.SendCommand(cmd.toJSON())
+
+	sr := Response{}
+
+	err = c.conn.ReadJSON(&sr)
+
+	err = c.checkErr(&sr)
+
+	if err != nil {
+		return
+	}
+
+	ledger = sr.Result.Ledger
+
+	return
+}
+
+//GetClosedLedger returns get last closed ledger
 func (c *Client) GetClosedLedger() (ledger *Ledger, err error) {
 
 	cmd := Command{
@@ -50,11 +83,17 @@ func (c *Client) GetClosedLedger() (ledger *Ledger, err error) {
 
 	err = c.SendCommand(cmd.toJSON())
 
-	rsp := Response{}
+	sr := Response{}
 
-	err = c.conn.ReadJSON(&rsp)
+	err = c.conn.ReadJSON(&sr)
 
-	ledger = rsp.Result.Ledger
+	err = c.checkErr(&sr)
+
+	if err != nil {
+		return
+	}
+
+	ledger = sr.Result.Ledger
 
 	return
 }
@@ -261,7 +300,7 @@ func (c *Client) handleMessage() {
 func (c *Client) checkErr(res *Response) (errMsg error) {
 
 	if res.Status == statusError {
-		errMsg = fmt.Errorf("%s - %d -  %s", res.Error.Error, res.Error.ErrorCode, res.ErrorMessage)
+		errMsg = fmt.Errorf("[ERR:%s:%d] %s", res.Error.Error, res.Error.ErrorCode, res.ErrorMessage)
 	}
 
 	return
