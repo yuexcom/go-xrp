@@ -48,7 +48,7 @@ type Request struct {
 
 type Error struct {
 	Error        string `json:"error,omitempty"`
-	ErrorCode    string `json:"error_code,omitempty"`
+	ErrorCode    int    `json:"error_code,omitempty"`
 	ErrorMessage string `json:"error_message,omitempty"`
 }
 
