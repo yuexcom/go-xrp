@@ -17,6 +17,7 @@ var (
 
 const (
 	statusSuccess    = "success"
+	statusError      = "error"
 	typeLedgerClosed = "ledgerClosed"
 	typeResponse     = "response"
 	typeTransaction  = "transaction"
@@ -102,13 +103,19 @@ func (c *Client) SubmitTransaction(tx *TxOptions) (rsp *TxResult, err error) {
 		return
 	}
 
+	err = c.checkErr(&sr)
+
+	if err != nil {
+		return
+	}
+
 	rsp = sr.Result.TxResult
 
 	return
 }
 
 //Ping ping XRP server
-func (c *Client) Ping() (status bool, err error) {
+func (c *Client) Ping() (err error) {
 
 	cmd := Command{
 		Command: "ping",
@@ -121,16 +128,18 @@ func (c *Client) Ping() (status bool, err error) {
 		return
 	}
 
-	rsp := Response{}
+	sr := Response{}
 
-	err = c.conn.ReadJSON(&rsp)
+	err = c.conn.ReadJSON(&sr)
 
 	if err != nil {
 		return
 	}
 
-	if rsp.Status == statusSuccess {
-		status = true
+	err = c.checkErr(&sr)
+
+	if err != nil {
+		return
 	}
 
 	return
@@ -176,15 +185,10 @@ func Dial(host string, tls bool) (c Client, err error) {
 
 	c.conn = conn
 
-	status, err := c.Ping()
+	err = c.Ping()
 
 	if err != nil {
 		log.Fatal("go-xrp ping: ", err)
-		return
-	}
-
-	if !status {
-		log.Fatal("go-xrp ping: ", errPing)
 		return
 	}
 
@@ -252,4 +256,14 @@ func (c *Client) handleMessage() {
 		}
 
 	}
+}
+
+func (c *Client) checkErr(res *Response) (errMsg error) {
+
+	if res.Status == statusError {
+		errMsg = fmt.Errorf("%s - %d -  %s", res.Error.Error, res.Error.ErrorCode, res.ErrorMessage)
+	}
+
+	return
+
 }

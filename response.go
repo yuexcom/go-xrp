@@ -46,12 +46,19 @@ type Request struct {
 	Strict      bool   `json:"strict,omitempty"`
 }
 
+type Error struct {
+	Error        string `json:"error,omitempty"`
+	ErrorCode    string `json:"error_code,omitempty"`
+	ErrorMessage string `json:"error_message,omitempty"`
+}
+
 //Response todo..
 type Response struct {
-	ID       int    `json:"id,omitempty"`
-	Status   string `json:"status,omitempty"`
-	Type     string `json:"type,omitempty"`
-	Error    string `json:"error,omitempty"`
+	ID     int    `json:"id,omitempty"`
+	Status string `json:"status,omitempty"`
+	Type   string `json:"type,omitempty"`
+
+	*Error
 	*Request `json:"request,omitempty"`
 	*Result  `json:"result,omitempty"`
 
